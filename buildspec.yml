@@ -1,0 +1,32 @@
+version: 0.2
+
+# CodeBuild build stage for the CodePipeline -> Elastic Beanstalk deployment.
+# The output artifact is zipped by CodePipeline and handed to Elastic Beanstalk
+# as a new application version.
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 20
+    on-failure: ABORT
+    commands:
+      - npm ci
+  build:
+    commands:
+      - npm test
+  post_build:
+    commands:
+      # Ship only production dependencies to the instances.
+      - npm prune --omit=dev
+
+artifacts:
+  # Bundle the whole app (including node_modules) so Elastic Beanstalk deploys
+  # a ready-to-run application version without installing on each instance.
+  files:
+    - '**/*'
+  exclude-paths:
+    - '.git/**/*'
+
+cache:
+  paths:
+    - '/root/.npm/**/*'
