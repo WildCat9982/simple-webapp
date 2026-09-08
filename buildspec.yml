@@ -20,7 +20,7 @@ phases:
       - echo "We are in the build block"
       - echo "We will run some tests."
       - npm test
-      - grep -Fq "Congratulations" index.html
+      - grep -r "Congratulations" public/index.html
   post_build:
     commands:
       # Ship only production dependencies to the instances.
