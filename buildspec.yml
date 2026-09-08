@@ -13,6 +13,7 @@ phases:
       - echo "Installing dependencies."
       - npm ci
   pre_build:
+    commands:
       - echo "We are in the pre build phase"
   build:
     commands:
