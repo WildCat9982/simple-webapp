@@ -10,13 +10,20 @@ phases:
       nodejs: 20
     on-failure: ABORT
     commands:
+      - echo "Installing dependencies."
       - npm ci
+  pre_build:
+      - echo "We are in the pre build phase"
   build:
     commands:
+      - echo "We are in the build block"
+      - echo "We will run some tests."
       - npm test
+      - grep -Fq "Congratulations" index.html
   post_build:
     commands:
       # Ship only production dependencies to the instances.
+      - echo "We are in the post build phase"
       - npm prune --omit=dev
 
 artifacts:
